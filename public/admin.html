@@ -1,84 +1,33 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - SHQAWA PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-<style>
-*{font-family:'Cairo',sans-serif;box-sizing:border-box}
-body{background:#111;color:#fff;padding:30px}
-.box{max-width:600px;margin:auto;background:#000;padding:30px;border-radius:15px;border:1px solid #222}
-input,textarea{width:100%;padding:12px;margin:10px 0;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px}
-button{background:#ff0000;color:#fff;padding:12px 30px;border:none;border-radius:8px;cursor:pointer;width:100%;font-weight:700;font-size:16px;margin-top:15px}
-#preview{width:100%;max-height:300px;object-fit:cover;border-radius:10px;margin-top:15px;display:none;border:1px solid #333}
-.status{color:#ff0000;margin:10px 0}
-</style>
-</head>
-<body>
-
-<div class="box">
-<h1 style="color:#ff0000">لوحة تحكم SHQAWA PRO</h1>
-<p style="color:#aaa">ارفع شغلك هنا وهيظهر في موقع العملاء حالا</p>
-
-<input id="title" placeholder="اسم المشروع - مثال: متجر الأستاذ">
+<html dir="rtl"><head><meta charset="utf-8"><title>Admin SHQAWA PRO</title>
+<style>body{background:#111;color:#fff;font-family:sans-serif;padding:30px}.box{max-width:600px;margin:auto;background:#000;padding:25px;border-radius:15px;border:1px solid #222}input,select,textarea{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px}button{background:#ff0000;color:#fff;padding:12px;border:none;border-radius:8px;width:100%;font-weight:700;margin-top:15px;cursor:pointer}</style>
+</head><body><div class="box">
+<h1 style="color:red">لوحة تحكم SHQAWA PRO</h1>
+<select id="category"><option value="websites">💻 مواقع ومتاجر</option><option value="apps">📱 تطبيقات</option><option value="designs">🎨 تصاميم وبنرات</option></select>
+<input id="title" placeholder="اسم المشروع">
 <textarea id="desc" placeholder="وصف المشروع"></textarea>
-
 <input type="file" id="file" accept="image/*" onchange="upload()">
-<p class="status" id="status"></p>
-<img id="preview">
-
-<button onclick="save()">نشر المشروع في الموقع 🚀</button>
-
-<p style="margin-top:20px;text-align:center"><a href="/" style="color:#aaa">← شوف موقع العملاء</a></p>
+<p id="status" style="color:red"></p>
+<img id="preview" style="width:100%;display:none;border-radius:10px;margin-top:10px">
+<button onclick="save()">نشر 🚀</button>
+<p style="text-align:center;margin-top:15px"><a href="/" style="color:#aaa">شوف الموقع</a></p>
 </div>
-
 <script>
-let imageUrl = "";
-
+let imageUrl="";
 async function upload(){
-  const file = document.getElementById('file').files[0];
-  if(!file) return;
-  document.getElementById('status').innerText = "⏳ بيرفع على Cloudinary...";
-  
-  const form = new FormData();
-  form.append('file', file);
-  form.append('upload_preset', 'shqawa_unsigned'); // غيره بالبريست بتاعك
-  // غير dqxxxxxxx باسم الكلاود نيم بتاعك
-  const CLOUD_NAME = "dqxxxxxxxxx"; 
-  
-  try{
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,{method:'POST',body:form});
-    const data = await res.json();
-    imageUrl = data.secure_url;
-    document.getElementById('preview').src = imageUrl;
-    document.getElementById('preview').style.display='block';
-    document.getElementById('status').innerText = "✅ اترفعت بنجاح";
-  }catch(err){
-    document.getElementById('status').innerText = "❌ خطأ في الرفع، اتأكد من اسم الكلاود والبريست";
-  }
+ const file=document.getElementById('file').files[0];
+ document.getElementById('status').innerText="بيرفع...";
+ const form=new FormData(); form.append('file',file); form.append('upload_preset','shqawa_unsigned');
+ const CLOUD_NAME="dqxxxxxxxxx"; // غيره باسمك
+ const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,{method:'POST',body:form});
+ const data=await res.json(); imageUrl=data.secure_url;
+ document.getElementById('preview').src=imageUrl; document.getElementById('preview').style.display='block';
+ document.getElementById('status').innerText="✅ اترفعت";
 }
-
 async function save(){
-  if(!imageUrl){ alert('ارفع صورة الأول'); return; }
-  const title = document.getElementById('title').value;
-  const desc = document.getElementById('desc').value;
-  if(!title){ alert('اكتب اسم المشروع'); return; }
-
-  await fetch('/api/projects',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({title, desc, image: imageUrl})
-  });
-  
-  alert('تم النشر يا وحش 🔥 المشروع ظهر في الموقع حالا');
-  document.getElementById('title').value='';
-  document.getElementById('desc').value='';
-  imageUrl='';
-  document.getElementById('preview').style.display='none';
-  document.getElementById('status').innerText='';
+ if(!imageUrl) return alert('ارفع صورة الاول');
+ const body={title:document.getElementById('title').value, desc:document.getElementById('desc').value, image:imageUrl, category:document.getElementById('category').value, date:Date.now()};
+ await fetch('/api/projects',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+ alert('اتنشر يا وحش في قسم '+body.category); location.reload();
 }
-</script>
-
-</body>
-</html>
+</script></body></html>
