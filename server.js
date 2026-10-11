@@ -3,16 +3,19 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 
-app.use(express.json({limit: '20mb'}));
+// لازم 50mb عشان الصور
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// اتأكد ان الملف موجود
 const dataPath = path.join(__dirname, 'projects.json');
 if(!fs.existsSync(dataPath)) fs.writeFileSync(dataPath, '[]');
 
 app.get('/api/projects', (req,res)=>{
-  const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-  res.json(data);
+  try{
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    res.json(data);
+  }catch(e){ res.json([]); }
 });
 
 app.post('/api/projects', (req,res)=>{
@@ -23,9 +26,9 @@ app.post('/api/projects', (req,res)=>{
   res.json({success:true});
 });
 
-// عشان Render
-app.get('*', (req,res)=>{
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// ده لازم يكون اخر حاجة خالص
+app.get('/admin', (req,res)=>{
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 const PORT = process.env.PORT || 10000;
