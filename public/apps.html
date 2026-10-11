@@ -1,1 +1,15 @@
-
+<!DOCTYPE html>
+<html dir="rtl"><head><meta charset="UTF-8"><title>مواقع - SHQAWA PRO</title>
+<style>body{margin:0;background:#000;color:#fff;font-family:sans-serif;padding:20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}.card{border:1px solid #222;border-radius:15px;overflow:hidden;background:#0a0a0a}.card img{width:100%;height:220px;object-fit:cover}a{color:red;text-decoration:none}</style>
+</head><body>
+<a href="/">← رجوع للرئيسية</a>
+<h1 style="color:red;margin-top:20px">💻 مشاريع المواقع والمتاجر</h1>
+<div class="grid" id="grid"></div>
+<script>
+const MY_CATEGORY = "websites"; // غيرها لـ apps او designs في الصفحات التانية
+fetch('/api/projects').then(r=>r.json()).then(data=>{
+ const filtered = data.filter(p=>p.category===MY_CATEGORY);
+ document.getElementById('grid').innerHTML = filtered.map(p=>`<div class="card"><img src="${p.image}"><div style="padding:15px"><h3>${p.title}</h3><p style="color:#aaa;font-size:13px">${p.desc}</p></div></div>`).join('') || '<p>لسه مفيش مشاريع في القسم ده</p>';
+});
+</script>
+</body></html>
