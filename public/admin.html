@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin SHQAWA PRO</title>
-<style>body{background:#111;color:#fff;font-family:sans-serif;padding:20px}.box{max-width:600px;margin:auto;background:#000;padding:25px;border-radius:15px;border:1px solid #222}input,select,textarea{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px}button{background:#ff0000;color:#fff;padding:14px;border:none;border-radius:50px;width:100%;font-weight:900;margin-top:15px;cursor:pointer}#preview{max-width:100%;display:none;border-radius:10px;margin-top:10px;border:1px solid #333}#info{color:#888;font-size:12px;margin-top:5px}</style>
-</head><body><div class="box">
-<h1 style="color:red">لوحة تحكم SHQAWA PRO</h1>
-<p style="color:#666;font-size:13px">الرفع هيبقى بالمقاس الأصلي 100% من غير تصغير</p>
-<select id="category"><option value="websites">💻 مواقع ومتاجر</option><option value="apps">📱 تطبيقات</option><option value="designs">🎨 تصاميم وبنرات</option></select>
+<style>
+body{background:#111;color:#fff;font-family:sans-serif;padding:15px}
+.box{max-width:600px;margin:auto;background:#000;padding:20px;border-radius:15px;border:1px solid #222;margin-bottom:20px}
+input,select,textarea{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px}
+button{background:#ff0000;color:#fff;padding:12px;border:none;border-radius:50px;width:100%;font-weight:900;cursor:pointer}
+#preview{width:100%;display:none;border-radius:10px;margin-top:10px}
+.project-card{display:flex;gap:10px;background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:10px;margin-bottom:10px;align-items:center}
+.project-card img{width:70px;height:70px;object-fit:cover;border-radius:8px}
+.del{background:#222;color:#ff0000;border:1px solid #333;padding:8px 15px;border-radius:20px;width:auto;font-size:13px}
+.del:hover{background:#ff0000;color:#fff}
+</style>
+</head><body>
+
+<div class="box">
+<h2 style="color:red">➕ ارفع مشروع جديد</h2>
+<select id="category"><option value="websites">💻 مواقع ومتاجر</option><option value="apps">📱 تطبيقات</option><option value="designs">🎨 تصاميم</option></select>
 <input id="title" placeholder="اسم المشروع">
-<textarea id="desc" placeholder="وصف المشروع"></textarea>
+<textarea id="desc" placeholder="الوصف"></textarea>
 <input type="file" id="file" accept="image/*">
-<p id="info"></p>
+<p id="status" style="color:#aaa;font-size:13px"></p>
 <img id="preview">
-<p id="status" style="color:red"></p>
 <button id="btn">نشر بالمقاس الأصلي 🚀</button>
 </div>
+
+<div class="box">
+<h2 style="color:#fff">📂 كل مشاريعك - دوس مسح لو عايز تمسح</h2>
+<div id="list" style="margin-top:15px"><p style="color:#666">بيحمل...</p></div>
+</div>
+
 <script>
 let imageUrl = "";
 document.getElementById('file').addEventListener('change', function(){
   const file = this.files[0];
   if(!file) return;
-
-  // نعرض المقاس الأصلي
-  const img = new Image();
-  img.onload = function(){
-    document.getElementById('info').innerText = `المقاس الأصلي: ${this.width} x ${this.height} - الحجم: ${(file.size/1024/1024).toFixed(2)} ميجا - هيترفع بنفس المقاس`;
-  };
-
   const reader = new FileReader();
   reader.onload = (e)=>{
-    imageUrl = e.target.result; // ده الأصلي 100% من غير اي تعديل
-    img.src = imageUrl;
+    imageUrl = e.target.result;
     document.getElementById('preview').src = imageUrl;
     document.getElementById('preview').style.display = 'block';
-    document.getElementById('status').innerText = "✅ جاهزة بالمقاس الأصلي";
+    document.getElementById('status').innerText = "✅ جاهزة";
   };
   reader.readAsDataURL(file);
 });
@@ -41,6 +49,33 @@ document.getElementById('btn').addEventListener('click', async ()=>{
   const body = {title:document.getElementById('title').value, desc:document.getElementById('desc').value, image:imageUrl, category:document.getElementById('category').value, date:Date.now()};
   document.getElementById('status').innerText = "بينشر...";
   const res = await fetch('/api/projects',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(res.ok){ alert('اتنشر بنفس المقاس يا وحش 🔥'); location.href='/'; }
+  if(res.ok){ alert('اتنشر يا وحش'); location.reload(); }
 });
-</script></body></html>
+
+async function loadProjects(){
+  const res = await fetch('/api/projects');
+  const data = await res.json();
+  if(data.length==0){ document.getElementById('list').innerHTML='<p style="color:#666">لسه مفيش مشاريع</p>'; return; }
+  document.getElementById('list').innerHTML = data.map(p=>`
+    <div class="project-card">
+      <img src="${p.image}">
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700">${p.title}</div>
+        <div style="font-size:11px;color:${p.category=='websites'?'#0f0':p.category=='apps'?'#0af':'#f0f'}">${p.category}</div>
+        <div style="font-size:11px;color:#666">${p.desc?.substring(0,40)||''}</div>
+      </div>
+      <button class="del" onclick="deleteProject('${p.date}')">مسح 🗑️</button>
+    </div>
+  `).join('');
+}
+
+async function deleteProject(date){
+  if(!confirm('متأكد عايز تمسح المشروع ده؟')) return;
+  await fetch('/api/projects/'+date, {method:'DELETE'});
+  alert('اتمسح');
+  loadProjects();
+}
+
+loadProjects();
+</script>
+</body></html>
