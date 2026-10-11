@@ -1,28 +1,32 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 
-app.use(express.json({limit: '10mb'}));
-app.use(express.static('public'));
+app.use(express.json({limit: '20mb'}));
+app.use(express.static(path.join(__dirname, 'public')));
 
-const DATA_FILE = './projects.json';
+// اتأكد ان الملف موجود
+const dataPath = path.join(__dirname, 'projects.json');
+if(!fs.existsSync(dataPath)) fs.writeFileSync(dataPath, '[]');
 
-// API يقرا المشاريع
 app.get('/api/projects', (req,res)=>{
-  if(!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE,'[]');
-  const data = JSON.parse(fs.readFileSync(DATA_FILE));
+  const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
   res.json(data);
 });
 
-// API يحفظ مشروع جديد
 app.post('/api/projects', (req,res)=>{
-  let projects = [];
-  if(fs.existsSync(DATA_FILE)) projects = JSON.parse(fs.readFileSync(DATA_FILE));
+  const projects = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
   projects.unshift(req.body);
-  fs.writeFileSync(DATA_FILE, JSON.stringify(projects, null, 2));
-  res.json({ok:true, message: 'اتحفظ يا شقاوة'});
+  fs.writeFileSync(dataPath, JSON.stringify(projects, null, 2));
+  console.log('مشروع جديد اتضاف:', req.body.title);
+  res.json({success:true});
+});
+
+// عشان Render
+app.get('*', (req,res)=>{
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, ()=> console.log('SHQAWA PRO شغال على '+PORT));
+app.listen(PORT, ()=> console.log('SHQAWA PRO شغال...'));
