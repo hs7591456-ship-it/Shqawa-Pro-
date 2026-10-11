@@ -11,26 +11,22 @@ const dataPath = path.join(__dirname, 'projects.json');
 if(!fs.existsSync(dataPath)) fs.writeFileSync(dataPath, '[]');
 
 app.get('/api/projects', (req,res)=>{
-  try{
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    res.json(data);
-  }catch(e){ res.json([]); }
+  try{ res.json(JSON.parse(fs.readFileSync(dataPath,'utf8'))); }catch{ res.json([]); }
 });
 
 app.post('/api/projects', (req,res)=>{
-  const projects = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+  const projects = JSON.parse(fs.readFileSync(dataPath,'utf8'));
   projects.unshift(req.body);
-  fs.writeFileSync(dataPath, JSON.stringify(projects, null, 2));
+  fs.writeFileSync(dataPath, JSON.stringify(projects,null,2));
   res.json({success:true});
 });
 
-// الجديد: مسح مشروع
 app.delete('/api/projects/:date', (req,res)=>{
-  let projects = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+  let projects = JSON.parse(fs.readFileSync(dataPath,'utf8'));
   projects = projects.filter(p => String(p.date)!== String(req.params.date));
-  fs.writeFileSync(dataPath, JSON.stringify(projects, null, 2));
+  fs.writeFileSync(dataPath, JSON.stringify(projects,null,2));
   res.json({success:true});
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, ()=> console.log('SHQAWA PRO شغال...'));
+app.listen(PORT, ()=> console.log('SHQAWA شغال'));
