@@ -1,19 +1,97 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SHQAWA PRO</title>
-<style>body{margin:0;background:#000;color:#fff;font-family:sans-serif}header{padding:20px 5%;display:flex;justify-content:space-between;border-bottom:1px solid #111}.logo{color:#ff0000;font-weight:900;font-size:26px}.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:40px 5%}.cat{background:#0a0a0a;border:1px solid #222;padding:40px;border-radius:20px;text-align:center;text-decoration:none;color:#fff}.cat h2{color:#ff0000}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;padding:20px 5%}.card{border:1px solid #222;border-radius:15px;overflow:hidden;background:#0a0a0a}.card img{width:100%;height:200px;object-fit:cover}</style>
-</head><body>
-<header><div class="logo">SHQAWA PRO</div><div>01020427153</div></header>
-<div style="text-align:center;padding:60px 5%"><h1 style="font-size:45px">بحول فكرتك لـ <span style="color:red">موقع بيجيب فلوس</span></h1></div>
-<div class="cats">
-<a href="websites.html" class="cat"><h2>💻 المواقع والمتاجر</h2><p>شوف كل شغلي</p></a>
-<a href="apps.html" class="cat"><h2>📱 التطبيقات</h2><p>شوف كل شغلي</p></a>
-<a href="designs.html" class="cat"><h2>🎨 التصاميم</h2><p>شوف كل شغلي</p></a>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SHQAWA PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{background:#000;color:#fff;overflow-x:hidden}
+header{padding:15px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:10;border-bottom:1px solid #111}
+.logo{color:#ff0000;font-weight:900;font-size:22px}
+.hero{
+  min-height:70vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:20px;
+  background: radial-gradient(circle at 50% 50%, rgba(255,0,0,0.25) 0%, #000 70%),
+              url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000') center/cover;
+  background-blend-mode: overlay;
+}
+.hero h1{font-size:32px;line-height:1.3;font-weight:900}
+.hero h1 span{color:#ff0000;text-shadow:0 0 20px red}
+.hero p{color:#aaa;margin:15px 0}
+.btn{background:#ff0000;color:#fff;padding:12px 30px;border-radius:50px;text-decoration:none;font-weight:700;display:inline-block;margin-top:10px;box-shadow:0 0 20px rgba(255,0,0,0.5)}
+
+/* الاقسام - شكل موبايل */
+.cats{padding:20px 4%;display:flex;flex-direction:column;gap:15px}
+.cat{
+  background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+  border:1px solid #222;
+  border-radius:20px;
+  padding:25px;
+  display:flex;align-items:center;gap:15px;
+  text-decoration:none;color:#fff;
+  position:relative;overflow:hidden;
+}
+.cat::before{content:'';position:absolute;top:0;right:0;width:100%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,0,0,0.05));}
+.cat .icon{font-size:35px;background:#000;width:60px;height:60px;display:flex;align-items:center;justify-content:center;border-radius:15px;border:1px solid #222}
+.cat h2{font-size:18px;color:#fff}
+.cat p{font-size:13px;color:#ff0000}
+.cat small{color:#666;font-size:11px}
+
+.last-title{padding:20px 4% 0;font-size:20px;color:#fff}
+.last-title span{color:#ff0000}
+.grid{padding:15px 4%;display:grid;grid-template-columns:1fr;gap:15px}
+.card{background:#0a0a0a;border:1px solid #222;border-radius:18px;overflow:hidden}
+.card img{width:100%;height:220px;object-fit:cover;display:block}
+.card .info{padding:12px}
+.whats{position:fixed;bottom:15px;left:4%;right:4%;background:#ff0000;color:#fff;padding:14px;border-radius:50px;text-align:center;text-decoration:none;font-weight:900;z-index:99}
+
+/* للكمبيوتر يبقى 3 جنب بعض */
+@media(min-width:768px){
+  .cats{flex-direction:row}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .hero h1{font-size:55px}
+  .whats{left:auto;right:20px;width:auto;padding:14px 25px}
+}
+</style>
+</head>
+<body>
+<header><div class="logo">SHQAWA PRO</div><div style="font-size:13px">01020427153</div></header>
+
+<div class="hero">
+  <h1>بحول فكرتك لـ<br><span>حقيقه </span></h1>
+  <p>مواقع - متاجر - تطبيقات - تصاميم سوشيال بضغطة زر</p>
+  <a class="btn" href="https://wa.me/201020427153">كلمني واتساب</a>
 </div>
-<h2 style="padding:0 5%;color:red">🔥 آخر أعمالي</h2>
+
+<div class="cats">
+  <a href="websites.html" class="cat">
+    <div class="icon">💻</div>
+    <div><h2>المواقع والمتاجر</h2><p>اضغط وشوف شغلي →</p></div>
+  </a>
+  <a href="apps.html" class="cat">
+    <div class="icon">📱</div>
+    <div><h2>التطبيقات</h2><p>اضغط وشوف شغلي →</p></div>
+  </a>
+  <a href="designs.html" class="cat">
+    <div class="icon">🎨</div>
+    <div><h2>التصاميم والبنرات</h2><p>اضغط وشوف شغلي →</p></div>
+  </a>
+</div>
+
+<h2 class="last-title">🔥 آخر <span>أعمالي</span></h2>
 <div class="grid" id="last"></div>
+
+<a class="whats" href="https://wa.me/201020427153">واتساب: 01020427153</a>
+
 <script>
 fetch('/api/projects').then(r=>r.json()).then(data=>{
- document.getElementById('last').innerHTML=data.slice(0,6).map(p=>`<div class="card"><img src="${p.image}"><div style="padding:15px"><h3>${p.title}</h3><small style="color:#aaa">${p.category}</small></div></div>`).join('') || '<p style="color:#555;padding:0 5%">لسه مفيش شغل ارفع من /admin.html</p>';
+  document.getElementById('last').innerHTML = data.slice(0,6).map(p=>`
+    <div class="card"><img src="${p.image}"><div class="info"><h3>${p.title}</h3><small style="color:#ff0000">${p.category}</small><p style="color:#aaa;font-size:12px;margin-top:4px">${p.desc}</p></div></div>
+  `).join('') || '<p style="color:#555;padding:20px">لسه مفيش مشاريع، ارفع من /admin.html</p>';
 });
 </script>
-</body></html>
+</body>
+</html>
