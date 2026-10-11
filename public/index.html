@@ -1,84 +1,19 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHQAWA PRO | شقاوة برو - تصميم مواقع وتطبيقات</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background:#000;color:#fff}
-header{padding:20px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1a1a1a}
-.logo{color:#ff0000;font-weight:900;font-size:28px;letter-spacing:2px}
-.logo span{color:#fff}
-.hero{padding:80px 5%;text-align:center}
-.hero h1{font-size:55px;font-weight:900;line-height:1.2}
-.hero h1 span{color:#ff0000}
-.hero p{color:#aaa;margin:20px 0;font-size:18px}
-.btn{background:#ff0000;color:#fff;padding:15px 40px;border-radius:50px;text-decoration:none;display:inline-block;font-weight:700;margin-top:20px}
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;padding:40px 5%}
-.card{border:1px solid #222;padding:30px;border-radius:15px;text-align:center;background:#0a0a0a}
-.card h3{color:#ff0000;margin-bottom:10px}
-.projects{padding:40px 5%}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px}
-.proj{border:1px solid #222;border-radius:15px;overflow:hidden;background:#0a0a0a}
-.proj img{width:100%;height:220px;object-fit:cover}
-.proj .info{padding:15px}
-.whats{position:fixed;bottom:20px;right:20px;background:#ff0000;color:#fff;padding:15px 25px;border-radius:50px;text-decoration:none;font-weight:700;z-index:99;box-shadow:0 0 20px rgba(255,0,0,0.5)}
-</style>
-</head>
-<body>
-
-<header>
-<div class="logo">S <span>SHQAWA PRO</span></div>
-<div>01020427153</div>
-</header>
-
-<div class="hero">
-<h1>بحول فكرتك لـ <span>موقع بيجيب فلوس</span></h1>
-<p>تصميم مواقع - متاجر إلكترونية - تطبيقات - بنرات احترافية</p>
-<a class="btn" href="https://wa.me/201020427153">كلمني واتساب</a>
+<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SHQAWA PRO</title>
+<style>body{margin:0;background:#000;color:#fff;font-family:sans-serif}header{padding:20px 5%;display:flex;justify-content:space-between;border-bottom:1px solid #111}.logo{color:#ff0000;font-weight:900;font-size:26px}.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:40px 5%}.cat{background:#0a0a0a;border:1px solid #222;padding:40px;border-radius:20px;text-align:center;text-decoration:none;color:#fff}.cat h2{color:#ff0000}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;padding:20px 5%}.card{border:1px solid #222;border-radius:15px;overflow:hidden;background:#0a0a0a}.card img{width:100%;height:200px;object-fit:cover}</style>
+</head><body>
+<header><div class="logo">SHQAWA PRO</div><div>01020427153</div></header>
+<div style="text-align:center;padding:60px 5%"><h1 style="font-size:45px">بحول فكرتك لـ <span style="color:red">موقع بيجيب فلوس</span></h1></div>
+<div class="cats">
+<a href="websites.html" class="cat"><h2>💻 المواقع والمتاجر</h2><p>شوف كل شغلي</p></a>
+<a href="apps.html" class="cat"><h2>📱 التطبيقات</h2><p>شوف كل شغلي</p></a>
+<a href="designs.html" class="cat"><h2>🎨 التصاميم</h2><p>شوف كل شغلي</p></a>
 </div>
-
-<div class="services">
-<div class="card"><h3>تصميم مواقع</h3><p>مواقع سريعة ومتجاوبة</p></div>
-<div class="card"><h3>متاجر إلكترونية</h3><p>زي موقع الأستاذ بالظبط</p></div>
-<div class="card"><h3>تطبيقات</h3><p>أندرويد و iOS</p></div>
-<div class="card"><h3>سوشيال ميديا</h3><p>بنرات ولوجوهات</p></div>
-</div>
-
-<div class="projects">
-<h2 style="font-size:30px">آخر <span style="color:#ff0000">أعمالي</span></h2>
-<div class="grid" id="projectsGrid">
-<!-- المشاريع هتظهر هنا اوتوماتيك من لوحة التحكم -->
-</div>
-</div>
-
-<a class="whats" href="https://wa.me/201020427153">واتساب: 01020427153</a>
-
+<h2 style="padding:0 5%;color:red">🔥 آخر أعمالي</h2>
+<div class="grid" id="last"></div>
 <script>
-async function loadProjects(){
-  try{
-    const res = await fetch('/api/projects');
-    const data = await res.json();
-    const grid = document.getElementById('projectsGrid');
-    if(data.length==0){
-      grid.innerHTML = '<p style="color:#555">لسه مفيش مشاريع، ارفع من لوحة التحكم /admin.html</p>';
-      return;
-    }
-    grid.innerHTML = data.map(p=>`
-      <div class="proj">
-        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/400x220/111/ff0000?text=SHQAWA+PRO'">
-        <div class="info">
-          <h3>${p.title}</h3>
-          <p style="color:#aaa;font-size:13px;margin-top:5px">${p.desc}</p>
-        </div>
-      </div>
-    `).join('');
-  }catch(e){console.log(e)}
-}
-loadProjects();
+fetch('/api/projects').then(r=>r.json()).then(data=>{
+ document.getElementById('last').innerHTML=data.slice(0,6).map(p=>`<div class="card"><img src="${p.image}"><div style="padding:15px"><h3>${p.title}</h3><small style="color:#aaa">${p.category}</small></div></div>`).join('') || '<p style="color:#555;padding:0 5%">لسه مفيش شغل ارفع من /admin.html</p>';
+});
 </script>
-
-</body>
-  </html>
+</body></html>
